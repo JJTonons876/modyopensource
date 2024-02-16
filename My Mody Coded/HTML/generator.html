@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YTP Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/ffmpeg.js@0.10.0/ffmpeg.min.js"></script>
+    <script>
+        function extractAudio() {
+            var inputFile = "input.mp4";
+            var outputFile = "output.mp3";
+            var ffmpeg = new FFmpeg({ log: true });
+            ffmpeg.FS('writeFile', inputFile, fs.readFileSync(inputFile));
+            ffmpeg.FS('writeFile', outputFile, '');
+            ffmpeg.run('-i', inputFile, '-vn', '-ab', '128', outputFile)
+                .on('end', function() {
+                    var audioData = ffmpeg.FS('readFile', outputFile);
+                    fs.writeFileSync(outputFile, audioData.buffer);
+                    console.log('Audio extraction complete');
+                })
+                .on('stderr', function(data) {
+                    console.log(data);
+                });
+        }
+    </script>
+</head>
+<body onload="extractAudio()">
+    <video id="videoPlayer" width="640" height="360" controls>
+        <source src="input.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <br>
+    <button onclick="speedUp()">Speed Up</button>
+    <button onclick="speedDown()">Speed Down</button>
+    <button onclick="reverse()">Reverse</button>
+    <button onclick="save()">Save</button>
+    <script>
+        // same as before
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YTP Generator</title>
+    <style>
+        #videoPlayer {
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+    <video id="videoPlayer" width="640" height="360" controls>
+        <source src="input.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <br>
+    <button onclick="speedUp()">Speed Up</button>
+    <button onclick="speedDown()">Speed Down</button>
+    <button onclick="reverse()">Reverse</button>
+    <button onclick="save()">Save</button>
+    <script>
+        var video = document.getElementById("videoPlayer");
+        var speed = 1.0;
+        var reverse = false;
+
+        function speedUp() {
+            speed += 0.1;
+            video.playbackRate = speed;
+        }
+
+        function speedDown() {
+            speed -= 0.1;
+            video.playbackRate = speed;
+        }
+
+        function reverse() {
+            reverse = !reverse;
+            if (reverse) {
+                video.playbackRate = -speed;
+            } else {
+                video.playbackRate = speed;
+            }
+        }
+
+        function save() {
+            var canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var dataURL = canvas.toDataURL("image/png");
+            var link = document.createElement("a");
+            link.href = dataURL;
+            link.download = "output.png";
+            link.click();
+        }
+    </script>
+</body>
+</html>
